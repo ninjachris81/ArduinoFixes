@@ -936,20 +936,24 @@ public class BaseNoGui {
   static public void saveFile(String str, File file) throws IOException {
     File temp = File.createTempFile(file.getName(), null, file.getParentFile());
     
-    if (str.startsWith("/* META INFOS")) {
-      int i = str.indexOf("*/");
-      if (i>0) {
-        str = str.substring(i+3);
-      }
-    }    
-    
-    String metaInfos = "/* META INFOS\n";
-    metaInfos+="target_package=" + PreferencesData.get("target_package") + "\n";
-    metaInfos+="target_platform=" + PreferencesData.get("target_platform") + "\n";
-    metaInfos+="board=" + PreferencesData.get("board") + "\n";
-    metaInfos+="*/";
-    
-    PApplet.saveStrings(temp, new String[] { metaInfos, str });
+    if (file.getName().endsWith(".ino")) {
+      if (str.startsWith("/* META INFOS")) {
+        int i = str.indexOf("*/");
+        if (i>0) {
+          str = str.substring(i+3);
+        }
+      }    
+      
+      String metaInfos = "/* META INFOS\n";
+      metaInfos+="target_package=" + PreferencesData.get("target_package") + "\n";
+      metaInfos+="target_platform=" + PreferencesData.get("target_platform") + "\n";
+      metaInfos+="board=" + PreferencesData.get("board") + "\n";
+      metaInfos+="*/";
+      
+      PApplet.saveStrings(temp, new String[] { metaInfos, str });
+    } else {
+      PApplet.saveStrings(temp, new String[] { str });
+    }
 
     try {
       file = file.getCanonicalFile();
