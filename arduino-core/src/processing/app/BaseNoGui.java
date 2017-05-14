@@ -635,12 +635,14 @@ public class BaseNoGui {
             PreferencesData.set(content[0], content[1]);
           } else {
             System.out.println("WARNING: Meta info " + contents[i] + " cannot be parsed");
+            i = 0;
+            break;
           }
           
           if (contents[i].equals("*/")) break;
         }
         
-        contents = Arrays.copyOfRange(contents, i+1, contents.length);
+        //if (i>0) contents = Arrays.copyOfRange(contents, i+1, contents.length);
       }
     }
     
@@ -933,6 +935,13 @@ public class BaseNoGui {
    */
   static public void saveFile(String str, File file) throws IOException {
     File temp = File.createTempFile(file.getName(), null, file.getParentFile());
+    
+    if (str.startsWith("/* META INFOS")) {
+      int i = str.indexOf("*/");
+      if (i>0) {
+        str = str.substring(i+3);
+      }
+    }    
     
     String metaInfos = "/* META INFOS\n";
     metaInfos+="target_package=" + PreferencesData.get("target_package") + "\n";
