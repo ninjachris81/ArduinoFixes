@@ -627,7 +627,9 @@ public class BaseNoGui {
       if (contents[0].equals("/* META INFOS")) {
         int i=0;
         
-        for (i=0;i<contents.length;i++) {
+        for (i=1;i<contents.length;i++) {
+          if (contents[i].equals("*/")) break;
+          
           String[] content = contents[i].split("=");
           
           if (content.length==2) {
@@ -638,8 +640,6 @@ public class BaseNoGui {
             i = 0;
             break;
           }
-          
-          if (contents[i].equals("*/")) break;
         }
         
         //if (i>0) contents = Arrays.copyOfRange(contents, i+1, contents.length);
